@@ -269,6 +269,36 @@ button {
 button:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 18px 45px rgba(255,80,160,.4); }
 button:active { transform: scale(.96); }
 
+/* Small black tooltip shown when hovering any button */
+button[data-tooltip] {
+    position: relative;
+}
+button[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%) translateY(4px);
+    background: rgba(0,0,0,.88);
+    color: #fff;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+}
+button[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
 .choice { min-width: 155px; }
 
 /* ========== HEART ========== */
@@ -427,7 +457,7 @@ button:active { transform: scale(.96); }
         </div>
 
         <div class="buttons">
-            <button onclick="begin()">Let's begin ✨</button>
+            <button onclick="begin()" data-tooltip="Start the experience">Let's begin ✨</button>
         </div>
     </div></div>
 </section>
@@ -444,9 +474,9 @@ button:active { transform: scale(.96); }
             <span style="font-size:.85em;color:#aaa">Choose whichever is true for you. ❤️</span>
         </p>
         <div class="buttons">
-            <button class="choice" onclick="chooseAge(15)">15 🌸</button>
-            <button class="choice" onclick="chooseAge(16)">16 💗</button>
-            <button class="choice" onclick="chooseAge(17)">17 ✨</button>
+            <button class="choice" onclick="chooseAge(15)" data-tooltip="Choose 15">15 🌸</button>
+            <button class="choice" onclick="chooseAge(16)" data-tooltip="Choose 16">16 💗</button>
+            <button class="choice" onclick="chooseAge(17)" data-tooltip="Choose 17">17 ✨</button>
         </div>
     </div></div>
 </section>
@@ -462,9 +492,9 @@ button:active { transform: scale(.96); }
             feel a little more special?
         </p>
         <div class="buttons">
-            <button class="choice" onclick="next(2)">A • Yes 💗</button>
-            <button class="choice" onclick="next(2)">B • Obviously yes ✨</button>
-            <button class="choice" onclick="next(2)">C • Maybe… 👀</button>
+            <button class="choice" onclick="next(2)" data-tooltip="Continue">A • Yes 💗</button>
+            <button class="choice" onclick="next(2)" data-tooltip="Continue">B • Obviously yes ✨</button>
+            <button class="choice" onclick="next(2)" data-tooltip="Continue">C • Maybe… 👀</button>
         </div>
     </div></div>
 </section>
@@ -481,9 +511,9 @@ button:active { transform: scale(.96); }
             would you remember them?
         </p>
         <div class="buttons">
-            <button class="choice" onclick="next(3)">A • Definitely ❤️</button>
-            <button class="choice" onclick="next(3)">B • Probably 😊</button>
-            <button class="choice" onclick="next(3)">C • I'd pretend I didn't 😌</button>
+            <button class="choice" onclick="next(3)" data-tooltip="Continue">A • Definitely ❤️</button>
+            <button class="choice" onclick="next(3)" data-tooltip="Continue">B • Probably 😊</button>
+            <button class="choice" onclick="next(3)" data-tooltip="Continue">C • I'd pretend I didn't 😌</button>
         </div>
     </div></div>
 </section>
@@ -500,9 +530,9 @@ button:active { transform: scale(.96); }
             seeing you happy?
         </p>
         <div class="buttons">
-            <button class="choice" onclick="proposal()">A • Yes ❤️</button>
-            <button class="choice" onclick="proposal()">B • Of course 💗</button>
-            <button class="choice" onclick="proposal()">C • Obviously 😭</button>
+            <button class="choice" onclick="proposal()" data-tooltip="Continue">A • Yes ❤️</button>
+            <button class="choice" onclick="proposal()" data-tooltip="Continue">B • Of course 💗</button>
+            <button class="choice" onclick="proposal()" data-tooltip="Continue">C • Obviously 😭</button>
         </div>
     </div></div>
 </section>
@@ -529,8 +559,8 @@ button:active { transform: scale(.96); }
         <div class="question">Would you give us a chance? ❤️</div>
 
         <div class="buttons proposalButtons" id="proposalButtons">
-            <button class="yes" onclick="accepted()">YES 💗</button>
-            <button class="no-btn" id="noBtn" type="button">No 🤍</button>
+            <button class="yes" onclick="accepted()" data-tooltip="Choose Yes">YES 💗</button>
+            <button class="no-btn" id="noBtn" type="button" data-tooltip="Wait 15 seconds before choosing No">No 🤍</button>
         </div>
     </div></div>
 </section>
@@ -593,7 +623,7 @@ button:active { transform: scale(.96); }
         <div class="signature">Made with code, courage and a ridiculous amount of heart. ♡</div>
 
         <div class="buttons">
-            <button onclick="restart()">Relive it ↻</button>
+            <button onclick="restart()" data-tooltip="Start again">Relive it ↻</button>
         </div>
     </div></div>
 </section>
@@ -752,48 +782,39 @@ function initNoButton() {
     noBtnRunning = true;
     noBtnDodges = 0;
 
-    // Playful for only a few seconds. After that, No is completely clickable.
+    // For the first 15 seconds, the No button is visibly present but is a prank:
+    // tapping it triggers a small message instead of accepting the choice.
     clearTimeout(noBtnTimer);
     noBtnTimer = setTimeout(() => {
         noBtnRunning = false;
-        noBtn.classList.remove("escaping");
+        noBtn.classList.remove("escaping", "no-prank-shake");
         noBtn.style.left = "";
         noBtn.style.top = "";
         noBtn.textContent = "No 🤍";
         noBtn.style.background = "linear-gradient(135deg, #6b6b7a, #8f8fa3)";
-    }, 3500);
+        noBtn.title = "You can tap No now";
+        noBtn.dataset.tooltip = "Tap to choose No";
+    }, 15000);
 
     function dodge(clientX, clientY) {
         if (!noBtnRunning) return;
 
         noBtnDodges++;
-        noBtn.classList.add("escaping");
 
-        const rect = noBtn.getBoundingClientRect();
-        const btnW = rect.width;
-        const btnH = rect.height;
-        const margin = 20;
-        const maxX = Math.max(margin, window.innerWidth - btnW - margin);
-        const maxY = Math.max(margin, window.innerHeight - btnH - margin);
+        // Keep the button visible and in place, but give it a playful shake.
+        noBtn.classList.remove("no-prank-shake");
+        void noBtn.offsetWidth;
+        noBtn.classList.add("no-prank-shake");
 
-        let newX = margin + Math.random() * Math.max(1, maxX - margin);
-        let newY = margin + Math.random() * Math.max(1, maxY - margin);
-
-        if (clientX !== undefined) {
-            let tries = 0;
-            while (Math.hypot(newX - clientX, newY - clientY) < 170 && tries++ < 12) {
-                newX = margin + Math.random() * Math.max(1, maxX - margin);
-                newY = margin + Math.random() * Math.max(1, maxY - margin);
-            }
-        }
-
-        noBtn.style.left = Math.min(newX, maxX) + "px";
-        noBtn.style.top = Math.min(newY, maxY) + "px";
         showTaunt(noBtn);
 
-        if (noBtnDodges === 1) noBtn.textContent = "wait… 😳";
-        else if (noBtnDodges === 2) noBtn.textContent = "okay okay 😭";
-        else noBtn.textContent = "not yet 😅";
+        if (noBtnDodges === 1) noBtn.textContent = "Not yet 😳";
+        else if (noBtnDodges === 2) noBtn.textContent = "15 seconds 😭";
+        else noBtn.textContent = "Wait... 😅";
+
+        setTimeout(() => {
+            if (noBtnRunning) noBtn.textContent = "No 🤍";
+        }, 700);
     }
 
     noBtn.addEventListener("mouseenter", e => {
@@ -905,14 +926,15 @@ function restart() {
     progress.style.width = "0%";
 
     noBtnInitialized = false;
-    noBtnCatchable = false;
     noBtnDodges = 0;
     const noBtn = document.getElementById("noBtn");
     if (noBtn) {
         noBtn.classList.remove("escaping", "caught");
         noBtn.style.left = "";
         noBtn.style.top = "";
-        noBtn.textContent = "no 🥺";
+        noBtn.textContent = "No 🤍";
+        noBtn.title = "";
+        noBtn.dataset.tooltip = "Wait 15 seconds before choosing No";
     }
 
     showScreen("intro", 0);
