@@ -2,942 +2,3556 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#090307">
+
 <title>Something I Need To Ask You ❤️</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-:root {
-    --pink: #ff5da8;
-    --rose: #ff9dca;
-    --purple: #a98cff;
-    --white: #fff;
-    --muted: #cfc5d4;
+:root{
+    --pink:#ff9dca;
+    --baby:#ffd1e5;
+    --hot:#ff4f9d;
+    --red:#ff335f;
+    --dark:#050205;
+    --black:#080508;
+    --glass:rgba(255,255,255,.075);
+    --line:rgba(255,255,255,.14);
+    --text:#fff8fc;
+    --muted:#cbbec7;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
+html{
+    scroll-behavior:smooth;
 }
 
-body {
-    font-family: "Segoe UI", Inter, system-ui, sans-serif;
-    color: white;
-    background: radial-gradient(circle at 50% 15%, #32152f 0%, #160c1d 45%, #05040a 100%);
-    perspective: 1200px;
+html,body{
+    width:100%;
+    min-height:100%;
+    background:#050205;
 }
 
-/* ========== BACKGROUND ========== */
-
-canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
+body{
+    font-family:
+        Inter,
+        "Segoe UI",
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+    color:var(--text);
+    overflow-x:hidden;
+    perspective:1600px;
 }
 
-.glow {
-    position: fixed;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: .15;
-    pointer-events: none;
-    z-index: 0;
-    animation: floatGlow 10s ease-in-out infinite alternate;
-}
-.glow.one { background: #ff4f9a; top: -250px; left: -200px; }
-.glow.two { background: #8065ff; bottom: -250px; right: -200px; animation-delay: 3s; }
+/* =========================================================
+   CINEMATIC BACKGROUND
+========================================================= */
 
-@keyframes floatGlow {
-    from { transform: translate(0, 0) scale(1); }
-    to { transform: translate(80px, 50px) scale(1.2); }
-}
-
-/* Floating orbiting hearts / bokeh video-like layer */
-.bokeh-layer {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-}
-.bokeh {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(2px);
-    opacity: 0.35;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,120,190,.1));
-    animation: bokehDrift linear infinite;
-}
-@keyframes bokehDrift {
-    0% { transform: translateY(110vh) translateX(0) scale(0.6); opacity: 0; }
-    10% { opacity: .5; }
-    90% { opacity: .4; }
-    100% { transform: translateY(-20vh) translateX(30px) scale(1.1); opacity: 0; }
+#scene{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(255,120,180,.15),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(255,40,80,.10),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #12060d,
+            #050205 45%,
+            #090307
+        );
 }
 
-/* ========== PROGRESS ========== */
-
-.progress {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(360px, 70vw);
-    height: 3px;
-    background: rgba(255,255,255,.1);
-    border-radius: 99px;
-    z-index: 20;
-}
-.progress span {
-    display: block;
-    width: 0;
-    height: 100%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, #ff5ca8, #c3a6ff);
-    transition: width .8s ease;
+#stars{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
 }
 
-/* ========== SCREENS ========== */
-
-.screen {
-    position: fixed;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    padding: 24px;
-    z-index: 5;
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1.04) rotateX(0deg);
-    transition: opacity .8s ease, transform .9s cubic-bezier(.2,.8,.2,1), visibility .8s;
-}
-.screen.active {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1) rotateX(0deg);
+.aurora{
+    position:absolute;
+    width:55vw;
+    height:55vw;
+    min-width:350px;
+    min-height:350px;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.16;
+    mix-blend-mode:screen;
+    animation:auroraFloat 14s ease-in-out infinite alternate;
 }
 
-/* ========== CARD (3D tilt) ========== */
-
-.card-wrap {
-    perspective: 1400px;
-    width: min(760px, 94vw);
+.aurora.one{
+    background:#ff4f9d;
+    left:-25%;
+    top:-25%;
 }
 
-.card {
-    position: relative;
-    width: 100%;
-    padding: clamp(32px, 7vw, 70px);
-    text-align: center;
-    border-radius: 38px;
-    background: linear-gradient(145deg, rgba(255,255,255,.11), rgba(255,255,255,.035));
-    border: 1px solid rgba(255,255,255,.14);
-    backdrop-filter: blur(25px);
-    box-shadow: 0 40px 120px rgba(0,0,0,.6), inset 0 1px rgba(255,255,255,.1);
-    overflow: hidden;
-    transform-style: preserve-3d;
-    transition: transform .15s ease-out, box-shadow .3s ease;
-    will-change: transform;
+.aurora.two{
+    background:#ff244f;
+    right:-30%;
+    bottom:-30%;
+    animation-delay:-5s;
 }
 
-.card::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(120deg, transparent 25%, rgba(255,255,255,.09), transparent 75%);
-    transform: translateX(-100%);
-    animation: cardShine 7s ease-in-out infinite;
-    pointer-events: none;
-}
-@keyframes cardShine {
-    35%, 100% { transform: translateX(100%); }
+.aurora.three{
+    background:#ffb6d7;
+    width:35vw;
+    height:35vw;
+    left:35%;
+    top:20%;
+    opacity:.07;
+    animation-duration:18s;
 }
 
-.card > * {
-    transform: translateZ(30px);
+@keyframes auroraFloat{
+    from{
+        transform:translate3d(0,0,0) scale(1);
+    }
+    to{
+        transform:translate3d(70px,40px,0) scale(1.18);
+    }
 }
 
-/* ========== TEXT ========== */
+/* =========================================================
+   LIGHT BEAMS
+========================================================= */
 
-.eyebrow {
-    font-size: 11px;
-    letter-spacing: .3em;
-    text-transform: uppercase;
-    color: #eab6d5;
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: clamp(42px, 9vw, 82px);
-    line-height: .98;
-    letter-spacing: -.05em;
-}
-
-.gradient {
-    background: linear-gradient(90deg, #fff, #ffb2d8, #c4b1ff, #fff);
-    background-size: 250%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: gradientMove 5s linear infinite;
-}
-@keyframes gradientMove { to { background-position: 250%; } }
-
-.subtitle {
-    max-width: 580px;
-    margin: 24px auto;
-    color: var(--muted);
-    font-size: clamp(15px, 2.4vw, 19px);
-    line-height: 1.75;
+.beam{
+    position:absolute;
+    width:2px;
+    height:130vh;
+    top:-15vh;
+    background:linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255,170,210,.16),
+        transparent
+    );
+    filter:blur(2px);
+    transform:rotate(28deg);
+    animation:beamMove 12s ease-in-out infinite;
 }
 
-/* ========== INPUT ========== */
-
-input {
-    width: min(480px, 100%);
-    padding: 17px 20px;
-    margin: 10px auto;
-    display: block;
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,.14);
-    background: rgba(0,0,0,.25);
-    color: white;
-    text-align: center;
-    outline: none;
-    font-size: 17px;
-    transition: .3s;
-}
-input::placeholder { color: #8f8794; }
-input:focus {
-    border-color: rgba(255,130,190,.8);
-    box-shadow: 0 0 0 5px rgba(255,90,170,.08), 0 0 30px rgba(255,90,170,.1);
+.beam.one{
+    left:15%;
 }
 
-.insta-field {
-    position: relative;
-    width: min(480px, 100%);
-    margin: 10px auto;
-}
-.insta-field .prefix {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #eab6d5;
-    font-size: 17px;
-    pointer-events: none;
-}
-.insta-field input {
-    padding-left: 34px;
-    margin: 0;
-    text-align: left;
+.beam.two{
+    left:70%;
+    animation-delay:-5s;
+    opacity:.5;
 }
 
-/* ========== BUTTONS ========== */
-
-.buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 25px;
+@keyframes beamMove{
+    0%,100%{
+        transform:rotate(28deg) translateX(-80px);
+        opacity:.15;
+    }
+    50%{
+        transform:rotate(28deg) translateX(80px);
+        opacity:.5;
+    }
 }
 
-button {
-    border: none;
-    border-radius: 999px;
-    padding: 15px 28px;
-    color: white;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    background: linear-gradient(135deg, #ff4f9e, #b28cff);
-    box-shadow: 0 12px 35px rgba(255,80,160,.25);
-    transition: transform .25s ease, box-shadow .25s ease;
-}
-button:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 18px 45px rgba(255,80,160,.4); }
-button:active { transform: scale(.96); }
+/* =========================================================
+   VIGNETTE
+========================================================= */
 
-/* Small black tooltip shown when hovering any button */
-button[data-tooltip] {
-    position: relative;
-}
-button[data-tooltip]::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 50%;
-    bottom: calc(100% + 10px);
-    transform: translateX(-50%) translateY(4px);
-    background: rgba(0,0,0,.88);
-    color: #fff;
-    padding: 7px 10px;
-    border-radius: 7px;
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 1.2;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    z-index: 100;
-    transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
-}
-button[data-tooltip]:hover::after {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
+.vignette{
+    position:fixed;
+    inset:0;
+    z-index:4;
+    pointer-events:none;
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 40%,
+            rgba(0,0,0,.55) 100%
+        );
 }
 
-.choice { min-width: 155px; }
+/* =========================================================
+   PARTICLES
+========================================================= */
 
-/* ========== HEART ========== */
-
-.heart {
-    font-size: 75px;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 0 25px rgba(255,80,160,.55));
-    animation: heartbeat 1.6s infinite;
-}
-@keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    10% { transform: scale(1.16); }
-    20% { transform: scale(1); }
-    30% { transform: scale(1.1); }
-    40% { transform: scale(1); }
+.particle-layer{
+    position:fixed;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    overflow:hidden;
 }
 
-/* ========== PROPOSAL ========== */
-
-.proposalHeart {
-    font-size: 95px;
-    animation: heartbeat 1.5s infinite, floatingHeart 4s ease-in-out infinite;
-    filter: drop-shadow(0 0 35px rgba(255,70,160,.7));
-}
-@keyframes floatingHeart {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+.particle{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,220,235,.9);
+    box-shadow:
+        0 0 10px rgba(255,150,200,.8),
+        0 0 25px rgba(255,80,160,.3);
+    animation:particleFloat linear infinite;
 }
 
-.proposalText {
-    margin-top: 25px;
-    font-size: clamp(16px, 2.5vw, 20px);
-    line-height: 1.8;
-    color: #eee5ed;
+@keyframes particleFloat{
+    0%{
+        transform:translate3d(0,110vh,0) scale(.3);
+        opacity:0;
+    }
+    10%{
+        opacity:.8;
+    }
+    90%{
+        opacity:.5;
+    }
+    100%{
+        transform:translate3d(
+            var(--drift),
+            -15vh,
+            0
+        ) scale(1);
+        opacity:0;
+    }
 }
 
-.question {
-    margin-top: 22px;
-    font-size: clamp(28px, 6vw, 48px);
-    font-weight: 800;
-    color: #ffb0d6;
+/* =========================================================
+   BUTTERFLIES
+========================================================= */
+
+.butterfly-layer{
+    position:fixed;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+    overflow:hidden;
 }
 
-.proposalButtons {
-    margin-top: 28px;
-    position: relative;
-    min-height: 120px;
+.butterfly{
+    position:absolute;
+    font-size:24px;
+    opacity:0;
+    filter:
+        drop-shadow(0 0 8px rgba(255,150,205,.7))
+        drop-shadow(0 0 18px rgba(255,70,140,.25));
+    animation:butterflyFlight linear infinite;
 }
 
-.yes {
-    padding: 17px 35px;
-    font-size: 17px;
-    background: linear-gradient(135deg, #ff4f9f, #ff82bd);
-    position: relative;
-    z-index: 3;
+@keyframes butterflyFlight{
+    0%{
+        transform:
+            translate3d(-10vw,110vh,0)
+            rotate(-10deg)
+            scale(.5);
+        opacity:0;
+    }
+
+    12%{
+        opacity:.8;
+    }
+
+    40%{
+        transform:
+            translate3d(30vw,60vh,0)
+            rotate(8deg)
+            scale(1);
+    }
+
+    70%{
+        transform:
+            translate3d(70vw,35vh,0)
+            rotate(-8deg)
+            scale(.85);
+    }
+
+    100%{
+        transform:
+            translate3d(110vw,-15vh,0)
+            rotate(15deg)
+            scale(.5);
+        opacity:0;
+    }
 }
 
-.no-btn {
-    padding: 17px 35px;
-    font-size: 17px;
-    background: linear-gradient(135deg, #6b6b7a, #8f8fa3);
-    position: relative;
-    z-index: 3;
-    transition: transform .18s ease, left .35s cubic-bezier(.2,.8,.2,1), top .35s cubic-bezier(.2,.8,.2,1);
-}
-.no-btn.escaping {
-    position: fixed;
-}
-.no-btn.caught {
-    background: linear-gradient(135deg, #ff4f9f, #ff82bd);
+/* =========================================================
+   TOP PROGRESS
+========================================================= */
+
+.progress{
+    position:fixed;
+    z-index:100;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(400px,70vw);
+    height:3px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    overflow:hidden;
+    backdrop-filter:blur(10px);
 }
 
-/* ========== FINAL ========== */
-
-.finalMessage {
-    max-width: 600px;
-    margin: 25px auto;
-    color: #f4eaf1;
-    font-size: 18px;
-    line-height: 1.9;
-}
-.signature { margin-top: 25px; color: #ffb4d9; font-style: italic; }
-
-/* ========== FLOATING PARTICLES ========== */
-
-.floatHeart {
-    position: fixed;
-    pointer-events: none;
-    z-index: 30;
-    animation: floatUp 5s linear forwards;
-}
-@keyframes floatUp {
-    0% { transform: translateY(0) scale(.7) rotate(0deg); opacity: 0; }
-    15% { opacity: 1; }
-    100% { transform: translateY(-110vh) scale(1.4) rotate(25deg); opacity: 0; }
+.progress span{
+    display:block;
+    height:100%;
+    width:0;
+    border-radius:inherit;
+    background:
+        linear-gradient(
+            90deg,
+            #ff477f,
+            #ff9dca,
+            #fff
+        );
+    box-shadow:
+        0 0 10px #ff5b9e,
+        0 0 25px rgba(255,80,150,.5);
+    transition:
+        width 1s cubic-bezier(.16,1,.3,1);
 }
 
-/* No-button taunt bubble */
-.taunt {
-    position: fixed;
-    z-index: 50;
-    background: rgba(0,0,0,.75);
-    border: 1px solid rgba(255,255,255,.15);
-    padding: 8px 14px;
-    border-radius: 14px;
-    font-size: 13px;
-    color: #ffd6ea;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity .3s ease;
-    white-space: nowrap;
-}
-.taunt.show { opacity: 1; }
+/* =========================================================
+   SCREENS
+========================================================= */
 
-/* ========== MOBILE ========== */
+.screen{
+    position:fixed;
+    inset:0;
+    z-index:10;
+    display:grid;
+    place-items:center;
+    padding:
+        max(35px,5vh)
+        20px
+        30px;
 
-@media(max-width:600px) {
-    .card { border-radius: 28px; padding: 36px 20px; }
-    .choice { width: 100%; }
-    .proposalHeart { font-size: 75px; }
-    .buttons { flex-direction: column; }
-    button { width: 100%; }
-    .no-btn.escaping { width: auto; }
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+
+    transform:
+        scale(1.055)
+        translateY(20px);
+
+    transition:
+        opacity .8s cubic-bezier(.16,1,.3,1),
+        transform 1s cubic-bezier(.16,1,.3,1),
+        visibility .8s;
 }
+
+.screen.active{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transform:
+        scale(1)
+        translateY(0);
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card-wrap{
+    width:min(820px,95vw);
+    perspective:1800px;
+}
+
+.card{
+    position:relative;
+    width:100%;
+    max-height:88vh;
+    overflow:auto;
+
+    padding:
+        clamp(32px,6vw,75px)
+        clamp(22px,6vw,75px);
+
+    text-align:center;
+
+    border-radius:
+        clamp(25px,4vw,42px);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.13),
+            rgba(255,255,255,.045)
+        );
+
+    border:1px solid var(--line);
+
+    box-shadow:
+        0 50px 140px rgba(0,0,0,.75),
+        inset 0 1px rgba(255,255,255,.14),
+        inset 0 -1px rgba(255,70,130,.04);
+
+    backdrop-filter:
+        blur(30px)
+        saturate(150%);
+
+    -webkit-backdrop-filter:
+        blur(30px)
+        saturate(150%);
+
+    transform-style:preserve-3d;
+
+    transition:
+        transform .18s ease-out,
+        box-shadow .4s ease;
+}
+
+.card::-webkit-scrollbar{
+    width:3px;
+}
+
+.card::-webkit-scrollbar-thumb{
+    background:#ff77aa;
+    border-radius:10px;
+}
+
+/* premium reflection */
+
+.card::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 20%,
+            rgba(255,255,255,.13),
+            transparent 45%
+        );
+
+    transform:
+        translateX(-130%);
+
+    animation:
+        reflection 8s ease-in-out infinite;
+
+    pointer-events:none;
+}
+
+@keyframes reflection{
+    35%,100%{
+        transform:translateX(130%);
+    }
+}
+
+/* glow edge */
+
+.card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    pointer-events:none;
+
+    box-shadow:
+        inset 0 0 80px rgba(255,100,170,.025),
+        0 0 80px rgba(255,70,150,.025);
+}
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
+.eyebrow{
+    font-size:11px;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    color:#ffc4dc;
+    margin-bottom:20px;
+    opacity:.9;
+}
+
+h1{
+    position:relative;
+    z-index:1;
+    font-size:clamp(40px,8vw,82px);
+    line-height:.98;
+    letter-spacing:-.055em;
+    font-weight:800;
+}
+
+.gradient{
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #ffd0e4,
+            #ff7bab,
+            #fff
+        );
+
+    background-size:250%;
+
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+
+    animation:
+        gradientMove 6s linear infinite;
+}
+
+@keyframes gradientMove{
+    to{
+        background-position:250%;
+    }
+}
+
+.subtitle{
+    max-width:620px;
+    margin:25px auto;
+    color:var(--muted);
+    font-size:clamp(15px,2.3vw,19px);
+    line-height:1.8;
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+input,
+select{
+    width:min(500px,100%);
+    margin:10px auto;
+    display:block;
+
+    padding:17px 20px;
+
+    border-radius:18px;
+
+    border:
+        1px solid rgba(255,255,255,.13);
+
+    background:
+        rgba(0,0,0,.28);
+
+    color:white;
+
+    outline:none;
+
+    font-size:16px;
+
+    transition:
+        border .3s,
+        box-shadow .3s,
+        transform .3s;
+}
+
+input::placeholder{
+    color:#8e828b;
+}
+
+input:focus,
+select:focus{
+    border-color:rgba(255,130,190,.75);
+
+    box-shadow:
+        0 0 0 5px rgba(255,90,170,.06),
+        0 0 35px rgba(255,90,170,.12);
+
+    transform:translateY(-2px);
+}
+
+select option{
+    background:#10070d;
+    color:white;
+}
+
+.insta-field{
+    position:relative;
+    width:min(500px,100%);
+    margin:10px auto;
+}
+
+.insta-field .prefix{
+    position:absolute;
+    left:20px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#ffc0da;
+}
+
+.insta-field input{
+    margin:0;
+    padding-left:38px;
+    text-align:left;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.buttons{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:13px;
+    margin-top:28px;
+}
+
+button{
+    border:0;
+    border-radius:999px;
+
+    padding:15px 30px;
+
+    color:white;
+
+    font-size:15px;
+    font-weight:750;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff477f,
+            #ff88b8
+        );
+
+    box-shadow:
+        0 12px 35px rgba(255,60,130,.25),
+        inset 0 1px rgba(255,255,255,.2);
+
+    transition:
+        transform .35s cubic-bezier(.16,1,.3,1),
+        box-shadow .35s,
+        filter .35s;
+}
+
+button:hover{
+    transform:
+        translateY(-5px)
+        scale(1.035);
+
+    box-shadow:
+        0 20px 55px rgba(255,60,130,.38),
+        0 0 25px rgba(255,100,170,.18);
+}
+
+button:active{
+    transform:scale(.96);
+}
+
+.choice{
+    min-width:165px;
+}
+
+/* =========================================================
+   HERO ICONS
+========================================================= */
+
+.heart{
+    font-size:76px;
+    margin-bottom:18px;
+
+    filter:
+        drop-shadow(0 0 15px rgba(255,70,140,.7))
+        drop-shadow(0 0 40px rgba(255,40,90,.35));
+
+    animation:
+        heartbeat 1.7s infinite;
+}
+
+.proposalHeart{
+    font-size:100px;
+
+    filter:
+        drop-shadow(0 0 18px rgba(255,70,140,.8))
+        drop-shadow(0 0 60px rgba(255,40,100,.4));
+
+    animation:
+        heartbeat 1.5s infinite,
+        floatingHeart 4s ease-in-out infinite;
+}
+
+@keyframes heartbeat{
+    0%,100%{transform:scale(1)}
+    10%{transform:scale(1.15)}
+    20%{transform:scale(1)}
+    30%{transform:scale(1.08)}
+    40%{transform:scale(1)}
+}
+
+@keyframes floatingHeart{
+    0%,100%{
+        translate:0 0;
+    }
+    50%{
+        translate:0 -13px;
+    }
+}
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+.question{
+    margin-top:24px;
+    font-size:clamp(27px,5vw,48px);
+    font-weight:850;
+    color:#ffc0db;
+}
+
+.proposalText{
+    margin-top:25px;
+    font-size:clamp(16px,2.4vw,19px);
+    line-height:1.85;
+    color:#eee4eb;
+}
+
+/* =========================================================
+   NO BUTTON
+========================================================= */
+
+.proposalButtons{
+    position:relative;
+    min-height:135px;
+}
+
+.no-btn{
+    position:relative;
+    z-index:5;
+    background:
+        linear-gradient(
+            135deg,
+            #45434b,
+            #77727c
+        );
+}
+
+.no-btn.running{
+    position:fixed;
+    margin:0;
+    z-index:500;
+    transition:
+        left .38s cubic-bezier(.16,1,.3,1),
+        top .38s cubic-bezier(.16,1,.3,1),
+        transform .25s;
+}
+
+.no-btn.running:hover{
+    transform:scale(1.04);
+}
+
+/* =========================================================
+   DATE PLANNER
+========================================================= */
+
+.date-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    max-width:650px;
+    margin:20px auto 0;
+}
+
+.date-grid input{
+    width:100%;
+    margin:0;
+}
+
+.place{
+    margin-top:4px;
+}
+
+.notice{
+    max-width:580px;
+    margin:20px auto 0;
+    padding:13px 16px;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,120,170,.06);
+
+    border:
+        1px solid rgba(255,150,190,.09);
+
+    color:#d9cbd2;
+    font-size:13px;
+    line-height:1.6;
+}
+
+/* =========================================================
+   CONFIRMATION
+========================================================= */
+
+.confirm-box{
+    margin:25px auto;
+    max-width:580px;
+
+    padding:24px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,180,210,.09),
+            rgba(255,255,255,.025)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    text-align:left;
+}
+
+.confirm-row{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.confirm-row:last-child{
+    border-bottom:0;
+}
+
+.confirm-label{
+    color:#9d9098;
+    font-size:13px;
+}
+
+.confirm-value{
+    color:#fff;
+    text-align:right;
+    font-weight:650;
+}
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.finalMessage{
+    max-width:620px;
+    margin:25px auto;
+    color:#f3eaf0;
+    font-size:18px;
+    line-height:1.9;
+}
+
+.signature{
+    margin-top:26px;
+    color:#ffb3d5;
+    font-style:italic;
+}
+
+.gift{
+    margin-top:30px;
+    padding:20px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,80,130,.10),
+            rgba(255,200,220,.05)
+        );
+
+    border:
+        1px solid rgba(255,150,190,.15);
+
+    box-shadow:
+        0 0 40px rgba(255,70,140,.06);
+}
+
+.gift strong{
+    display:block;
+    color:#ffd1e4;
+    font-size:20px;
+    margin-bottom:6px;
+}
+
+/* =========================================================
+   FLOATING HEARTS
+========================================================= */
+
+.floatHeart{
+    position:fixed;
+    z-index:300;
+    pointer-events:none;
+    animation:
+        floatUp linear forwards;
+}
+
+@keyframes floatUp{
+    0%{
+        transform:
+            translateY(0)
+            scale(.5)
+            rotate(-10deg);
+        opacity:0;
+    }
+
+    15%{
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translateY(-110vh)
+            scale(1.25)
+            rotate(20deg);
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+    z-index:1000;
+    left:50%;
+    bottom:25px;
+    transform:
+        translate(-50%,20px);
+
+    padding:12px 17px;
+
+    border-radius:14px;
+
+    background:
+        rgba(0,0,0,.78);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(15px);
+
+    color:#ffe4ef;
+
+    font-size:13px;
+
+    opacity:0;
+    pointer-events:none;
+
+    transition:
+        opacity .3s,
+        transform .3s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:650px){
+
+    .screen{
+        padding:45px 13px 20px;
+    }
+
+    .card{
+        max-height:90vh;
+        padding:38px 20px;
+        border-radius:27px;
+    }
+
+    h1{
+        font-size:clamp(39px,12vw,62px);
+    }
+
+    .subtitle{
+        font-size:15px;
+        line-height:1.7;
+    }
+
+    .buttons{
+        flex-direction:column;
+        width:100%;
+    }
+
+    button,
+    .choice{
+        width:100%;
+    }
+
+    .proposalButtons{
+        min-height:150px;
+    }
+
+    .date-grid{
+        grid-template-columns:1fr;
+    }
+
+    .confirm-row{
+        flex-direction:column;
+        gap:4px;
+    }
+
+    .confirm-value{
+        text-align:left;
+    }
+
+    .proposalHeart{
+        font-size:76px;
+    }
+}
+
+/* reduce animation when requested */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+        transition-duration:.01ms !important;
+    }
+}
+
+/* =========================================================
+   MERGED CINEMATIC ENHANCEMENTS
+========================================================= */
+
+.bokeh-layer{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    overflow:hidden;
+}
+
+.bokeh{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(2px);
+    opacity:.35;
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(255,255,255,.95),
+            rgba(255,120,190,.08)
+        );
+    animation:bokehDrift linear infinite;
+}
+
+@keyframes bokehDrift{
+    0%{
+        transform:translate3d(0,110vh,0) scale(.6);
+        opacity:0;
+    }
+    10%{opacity:.5}
+    90%{opacity:.4}
+    100%{
+        transform:translate3d(30px,-20vh,0) scale(1.1);
+        opacity:0;
+    }
+}
+
+.cinematicLight{
+    position:fixed;
+    inset:-20%;
+    z-index:2;
+    pointer-events:none;
+    background:
+        radial-gradient(
+            ellipse at 50% 50%,
+            rgba(255,120,190,.07),
+            transparent 45%
+        );
+    animation:cinematicPulse 8s ease-in-out infinite;
+}
+
+@keyframes cinematicPulse{
+    0%,100%{transform:scale(1);opacity:.65}
+    50%{transform:scale(1.12);opacity:1}
+}
+
+.grain{
+    position:fixed;
+    inset:0;
+    z-index:80;
+    pointer-events:none;
+    opacity:.025;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    animation:grainMove .25s steps(2) infinite;
+}
+
+@keyframes grainMove{
+    0%{transform:translate(0,0)}
+    25%{transform:translate(2%,-2%)}
+    50%{transform:translate(-2%,2%)}
+    75%{transform:translate(1%,2%)}
+    100%{transform:translate(0,0)}
+}
+
+/* Full-screen transition butterfly */
+.transition-butterfly-layer{
+    position:fixed;
+    inset:0;
+    z-index:1200;
+    pointer-events:none;
+    overflow:hidden;
+    opacity:0;
+    visibility:hidden;
+}
+
+.transition-butterfly-layer.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.transition-butterfly{
+    position:absolute;
+    left:-180px;
+    top:50%;
+    width:150px;
+    height:110px;
+    transform:translateY(-50%);
+    filter:
+        drop-shadow(0 0 20px rgba(255,130,190,.8))
+        drop-shadow(0 0 45px rgba(255,60,140,.4));
+}
+
+.transition-butterfly .body{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:12px;
+    height:65px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:linear-gradient(90deg,#21131c,#08070b,#21131c);
+    z-index:5;
+}
+
+.transition-butterfly .wing{
+    position:absolute;
+    top:50%;
+    width:75px;
+    height:100px;
+    transform-origin:center bottom;
+    border-radius:75% 25% 65% 35%;
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffd8e8 0%,
+            #ff8cbd 28%,
+            #ff315f 62%,
+            #8c0f3d 100%
+        );
+    border:1px solid rgba(255,255,255,.35);
+    box-shadow:
+        inset 0 0 20px rgba(255,255,255,.3),
+        0 0 20px rgba(255,50,140,.3);
+}
+
+.transition-butterfly .wing.left{
+    right:50%;
+    transform-origin:right bottom;
+    transform:translateY(-65%) rotate(-22deg);
+    border-radius:75% 25% 35% 65%;
+}
+
+.transition-butterfly .wing.right{
+    left:50%;
+    transform-origin:left bottom;
+    transform:translateY(-65%) rotate(22deg) scaleX(-1);
+}
+
+.transition-butterfly.fly{
+    animation:mergedButterflyFlight 2.4s cubic-bezier(.15,.75,.2,1) forwards;
+}
+
+.transition-butterfly.fly .wing{
+    animation:mergedWingBeat .16s ease-in-out infinite alternate;
+}
+
+@keyframes mergedWingBeat{
+    from{transform:translateY(-65%) rotate(-22deg) scaleY(1)}
+    to{transform:translateY(-65%) rotate(-22deg) scaleY(.68)}
+}
+
+@keyframes mergedButterflyFlight{
+    0%{
+        left:-180px;
+        top:75%;
+        transform:translateY(-50%) rotate(-12deg) scale(.75);
+        opacity:0;
+    }
+    10%{opacity:1}
+    30%{
+        top:28%;
+        transform:translateY(-50%) rotate(10deg) scale(1);
+    }
+    52%{
+        top:65%;
+        transform:translateY(-50%) rotate(-8deg) scale(1.15);
+    }
+    75%{
+        top:34%;
+        transform:translateY(-50%) rotate(7deg) scale(1.05);
+    }
+    100%{
+        left:115vw;
+        top:48%;
+        transform:translateY(-50%) rotate(-5deg) scale(.85);
+        opacity:0;
+    }
+}
+
+.transition-flash{
+    position:fixed;
+    inset:0;
+    z-index:1190;
+    pointer-events:none;
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,180,215,.22),
+            transparent 55%
+        );
+    opacity:0;
+}
+
+.transition-flash.active{
+    animation:mergedFlash 1.2s ease forwards;
+}
+
+@keyframes mergedFlash{
+    0%{opacity:0}
+    35%{opacity:1}
+    100%{opacity:0}
+}
+
+/* Better tooltip behavior, including touch-friendly status text */
+button[data-tooltip]{
+    position:relative;
+}
+
+button[data-tooltip]::after{
+    content:attr(data-tooltip);
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 10px);
+    transform:translateX(-50%) translateY(4px);
+    background:rgba(0,0,0,.92);
+    color:#fff;
+    padding:8px 11px;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:600;
+    white-space:nowrap;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .18s,transform .18s;
+    z-index:10000;
+}
+
+button[data-tooltip]:hover::after,
+button[data-tooltip].show-tooltip::after{
+    opacity:1;
+    visibility:visible;
+    transform:translateX(-50%) translateY(0);
+}
+
+.no-btn.locked{
+    cursor:not-allowed;
+}
+
+.no-btn.unlocked{
+    cursor:pointer;
+}
+
+
+@media(max-width:650px){
+    .transition-butterfly{
+        transform:translateY(-50%) scale(.65);
+    }
+
+    button[data-tooltip]::after{
+        max-width:220px;
+        white-space:normal;
+        text-align:center;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="glow one"></div>
-<div class="glow two"></div>
+<!-- =====================================================
+     CINEMATIC ENVIRONMENT
+===================================================== -->
 
-<canvas id="stars"></canvas>
+<div id="scene">
+
+    <canvas id="stars"></canvas>
+
+    <div class="aurora one"></div>
+    <div class="aurora two"></div>
+    <div class="aurora three"></div>
+
+    <div class="beam one"></div>
+    <div class="beam two"></div>
+
+</div>
+
+<div class="cinematicLight"></div>
 <div class="bokeh-layer" id="bokehLayer"></div>
+<div class="grain"></div>
 
-<div class="progress"><span id="progress"></span></div>
+<div class="transition-butterfly-layer" id="transitionButterflyLayer">
+    <div class="transition-butterfly" id="transitionButterfly">
+        <div class="wing left"></div>
+        <div class="wing right"></div>
+        <div class="body"></div>
+    </div>
+</div>
+
+<div class="transition-flash" id="transitionFlash"></div>
+
+<div class="particle-layer" id="particles"></div>
+<div class="butterfly-layer" id="butterflies"></div>
+<div class="vignette"></div>
+
+<div class="progress">
+    <span id="progress"></span>
+</div>
+
+<div class="toast" id="toast"></div>
 
 
-<!-- INTRO -->
+<!-- =====================================================
+     INTRO
+===================================================== -->
+
 <section class="screen active" id="intro">
-    <div class="card-wrap"><div class="card">
-        <div class="eyebrow">A little something I made for you</div>
-        <h1 class="gradient">Before we begin…</h1>
-        <p class="subtitle">
-            There's something I want to ask you.
-            But first, I need to know what to call the person
-            who's about to see it. ✨
-        </p>
 
-        <input id="name" maxlength="30" autocomplete="off" placeholder="Your name...">
+<div class="card-wrap">
 
-        <div class="insta-field">
-            <span class="prefix">@</span>
-            <input id="insta" maxlength="30" autocomplete="off" placeholder="Your Instagram (optional)">
-        </div>
+<div class="card">
 
-        <div class="buttons">
-            <button onclick="begin()" data-tooltip="Start the experience">Let's begin ✨</button>
-        </div>
-    </div></div>
+<div class="eyebrow">
+A little something I made for you
+</div>
+
+<h1 class="gradient">
+Before we begin…
+</h1>
+
+<p class="subtitle">
+There is something I have been wanting to ask you.
+<br>
+Nothing complicated.
+Nothing you have to rush.
+<br><br>
+Just a tiny little journey I made for you. ✨
+</p>
+
+<input
+    id="name"
+    maxlength="30"
+    autocomplete="off"
+    placeholder="Your name..."
+>
+
+<div class="insta-field">
+
+<span class="prefix">@</span>
+
+<input
+    id="insta"
+    maxlength="30"
+    autocomplete="off"
+    placeholder="Your Instagram"
+>
+
+</div>
+
+<div class="buttons">
+
+<button
+    onclick="begin()"
+>
+Let's begin ✨
+</button>
+
+</div>
+
+</div>
+</div>
+
 </section>
 
 
+<!-- =====================================================
+     AGE
+===================================================== -->
 
-<!-- AGE -->
 <section class="screen" id="age">
-    <div class="card-wrap"><div class="card">
-        <div class="eyebrow">Just one little thing</div>
-        <h1 class="gradient">Before we continue…</h1>
-        <p class="subtitle">
-            How old are you?<br>
-            <span style="font-size:.85em;color:#aaa">Choose whichever is true for you. ❤️</span>
-        </p>
-        <div class="buttons">
-            <button class="choice" onclick="chooseAge(15)" data-tooltip="Choose 15">15 🌸</button>
-            <button class="choice" onclick="chooseAge(16)" data-tooltip="Choose 16">16 💗</button>
-            <button class="choice" onclick="chooseAge(17)" data-tooltip="Choose 17">17 ✨</button>
-        </div>
-    </div></div>
+
+<div class="card-wrap">
+
+<div class="card">
+
+<div class="eyebrow">
+Just one little thing
+</div>
+
+<h1 class="gradient">
+Before we continue…
+</h1>
+
+<p class="subtitle">
+How old are you?
+<br>
+<span style="font-size:.85em;color:#aaa">
+Just choose what is true for you. ❤️
+</span>
+</p>
+
+<div class="buttons">
+
+<button
+    class="choice"
+    onclick="chooseAge(15)"
+>
+15 🌸
+</button>
+
+<button
+    class="choice"
+    onclick="chooseAge(16)"
+>
+16 💗
+</button>
+
+<button
+    class="choice"
+    onclick="chooseAge(17)"
+>
+17 ✨
+</button>
+
+</div>
+
+</div>
+</div>
+
 </section>
 
-<!-- QUESTION 1 -->
+
+<!-- =====================================================
+     QUESTION 1
+===================================================== -->
+
 <section class="screen" id="question1">
-    <div class="card-wrap"><div class="card">
-        <div class="eyebrow">Question 01</div>
-        <h1>Hey, <span class="gradient userName">you</span>…</h1>
-        <p class="subtitle">
-            Do you believe that sometimes,
-            one person can make an ordinary day
-            feel a little more special?
-        </p>
-        <div class="buttons">
-            <button class="choice" onclick="next(2)" data-tooltip="Continue">A • Yes 💗</button>
-            <button class="choice" onclick="next(2)" data-tooltip="Continue">B • Obviously yes ✨</button>
-            <button class="choice" onclick="next(2)" data-tooltip="Continue">C • Maybe… 👀</button>
-        </div>
-    </div></div>
+
+<div class="card-wrap">
+
+<div class="card">
+
+<div class="eyebrow">
+Question 01
+</div>
+
+<h1>
+Hey,
+<span class="gradient userName">
+you
+</span>…
+</h1>
+
+<p class="subtitle">
+Do you believe that sometimes,
+one person can make an ordinary day
+feel a little more special?
+</p>
+
+<div class="buttons">
+
+<button onclick="next(2)">
+Yes 💗
+</button>
+
+<button onclick="next(2)">
+Obviously yes ✨
+</button>
+
+<button onclick="next(2)">
+Maybe… 👀
+</button>
+
+</div>
+
+</div>
+</div>
+
 </section>
 
 
-<!-- QUESTION 2 -->
+<!-- =====================================================
+     QUESTION 2
+===================================================== -->
+
 <section class="screen" id="question2">
-    <div class="card-wrap"><div class="card">
-        <div class="eyebrow">Question 02</div>
-        <h1 class="gradient">Be honest…</h1>
-        <p class="subtitle">
-            If someone could make you smile
-            without even trying,
-            would you remember them?
-        </p>
-        <div class="buttons">
-            <button class="choice" onclick="next(3)" data-tooltip="Continue">A • Definitely ❤️</button>
-            <button class="choice" onclick="next(3)" data-tooltip="Continue">B • Probably 😊</button>
-            <button class="choice" onclick="next(3)" data-tooltip="Continue">C • I'd pretend I didn't 😌</button>
-        </div>
-    </div></div>
+
+<div class="card-wrap">
+
+<div class="card">
+
+<div class="eyebrow">
+Question 02
+</div>
+
+<h1 class="gradient">
+Be honest…
+</h1>
+
+<p class="subtitle">
+If someone could make you smile
+without even trying,
+would you remember them?
+</p>
+
+<div class="buttons">
+
+<button onclick="next(3)">
+Definitely ❤️
+</button>
+
+<button onclick="next(3)">
+Probably 😊
+</button>
+
+<button onclick="next(3)">
+I'd pretend I didn't 😌
+</button>
+
+</div>
+
+</div>
+</div>
+
 </section>
 
 
-<!-- QUESTION 3 -->
+<!-- =====================================================
+     QUESTION 3
+===================================================== -->
+
 <section class="screen" id="question3">
-    <div class="card-wrap"><div class="card">
-        <div class="eyebrow">One last thing…</div>
-        <h1>Almost there.</h1>
-        <p class="subtitle">
-            Would you give a little piece of your time
-            to someone who genuinely cares about
-            seeing you happy?
-        </p>
-        <div class="buttons">
-            <button class="choice" onclick="proposal()" data-tooltip="Continue">A • Yes ❤️</button>
-            <button class="choice" onclick="proposal()" data-tooltip="Continue">B • Of course 💗</button>
-            <button class="choice" onclick="proposal()" data-tooltip="Continue">C • Obviously 😭</button>
-        </div>
-    </div></div>
+
+<div class="card-wrap">
+
+<div class="card">
+
+<div class="eyebrow">
+One last thing…
+</div>
+
+<h1>
+Almost there.
+</h1>
+
+<p class="subtitle">
+Would you give a little piece of your time
+to someone who genuinely cares about
+seeing you happy?
+</p>
+
+<div class="buttons">
+
+<button onclick="proposal()">
+Yes ❤️
+</button>
+
+<button onclick="proposal()">
+Of course 💗
+</button>
+
+<button onclick="proposal()">
+Obviously 😭
+</button>
+
+</div>
+
+</div>
+</div>
+
 </section>
 
 
-<!-- PROPOSAL -->
+<!-- =====================================================
+     PROPOSAL
+===================================================== -->
+
 <section class="screen" id="proposal">
-    <div class="card-wrap"><div class="card">
-        <div class="proposalHeart">❤️</div>
-        <div class="eyebrow">Okay…</div>
-        <h1 class="gradient"><span class="userName">You</span>, I have one final question.</h1>
-        <p class="proposalText">
-            I've been hiding the real reason behind all those questions.
-            <br><br>
-            Some people enter our lives quietly,
-            and somehow leave a little more light behind them.
-            You're one of those people for me.
-            <br><br>
-            I don't know what tomorrow has written for us,
-            and I don't want to force the story.
-            I just wanted to be brave enough to tell you
-            what my heart has been trying to say.
-        </p>
-        <div class="question">Would you give us a chance? ❤️</div>
 
-        <div class="buttons proposalButtons" id="proposalButtons">
-            <button class="yes" onclick="accepted()" data-tooltip="Choose Yes">YES 💗</button>
-            <button class="no-btn" id="noBtn" type="button" data-tooltip="Wait 15 seconds before choosing No">No 🤍</button>
-        </div>
-    </div></div>
+<div class="card-wrap">
+
+<div class="card">
+
+<div class="proposalHeart">
+❤️
+</div>
+
+<div class="eyebrow">
+Okay…
+</div>
+
+<h1 class="gradient">
+
+<span class="userName">
+You
+</span>,
+
+I have one final question.
+
+</h1>
+
+<p class="proposalText">
+
+I've been hiding the real reason behind
+all those questions.
+
+<br><br>
+
+Some people enter our lives quietly
+and somehow leave a little more light
+behind them.
+
+You're one of those people for me.
+
+<br><br>
+
+I don't know what tomorrow has written
+for us and I don't want to force the story.
+
+I just wanted to be brave enough to ask.
+
+</p>
+
+<div class="question">
+Would you give us a chance? ❤️
+</div>
+
+<div
+    class="buttons proposalButtons"
+    id="proposalButtons"
+>
+
+<button
+    class="yes"
+    onclick="accepted()"
+>
+YES 💗
+</button>
+
+<button
+    class="no-btn locked"
+    id="noBtn"
+    type="button"
+    data-tooltip="Wait 15 seconds before choosing No"
+    aria-label="No, locked for 15 seconds"
+>
+No 🤍
+</button>
+
+</div>
+
+</div>
+</div>
+
 </section>
 
 
+<!-- =====================================================
+     REJECTED
+===================================================== -->
 
-<!-- RESPECTFUL NO -->
 <section class="screen" id="rejected">
-    <div class="card-wrap"><div class="card">
-        <div class="heart">🤍</div>
-        <div class="eyebrow">Thank you for being honest</div>
-        <h1 class="gradient">It's okay.</h1>
 
-        <div class="finalMessage">
-            <span class="userName">You</span>,
-            your answer doesn't make you any less special.
-            <br><br>
-            I may have hoped for a different answer,
-            but I'd rather have your honest heart
-            than a yes you didn't truly mean.
-            <br><br>
-            If our paths are meant to cross again,
-            maybe life will write that chapter in its own time.
-            And if not, I will still be grateful
-            that our paths crossed at all.
-            <br><br>
-            <strong>May God keep you happy, safe, and surrounded by people
-            who genuinely care about you. 🌸</strong>
-            <br><br>
-            No anger. No guilt. No pressure.
-            Just a sincere thank you for listening.
-        </div>
+<div class="card-wrap">
 
-        <div class="signature">Some feelings are beautiful simply because they were true. ♡</div>
-    </div></div>
+<div class="card">
+
+<div class="heart">
+🤍
+</div>
+
+<div class="eyebrow">
+Thank you for being honest
+</div>
+
+<h1 class="gradient">
+It's okay.
+</h1>
+
+<div class="finalMessage">
+
+<span class="userName">
+You
+</span>,
+
+your answer doesn't make you
+any less special.
+
+<br><br>
+
+I may have hoped for a different answer,
+but I'd rather have your honest heart
+than a yes you didn't truly mean.
+
+<br><br>
+
+No anger.
+No guilt.
+No pressure.
+
+Just a sincere thank you
+for listening.
+
+<br><br>
+
+<strong>
+May God keep you happy,
+safe and surrounded by people
+who genuinely care about you. 🌸
+</strong>
+
+</div>
+
+<div class="signature">
+Some feelings are beautiful simply
+because they were true. ♡
+</div>
+
+</div>
+</div>
+
 </section>
 
-<!-- ACCEPTED -->
+
+
+<!-- =====================================================
+     ACCEPTED
+===================================================== -->
+
 <section class="screen" id="accepted">
-    <div class="card-wrap"><div class="card">
-        <div class="heart">💖</div>
-        <div class="eyebrow">You said yes…</div>
-        <h1 class="gradient">Then it's a yes.</h1>
 
-        <div class="finalMessage">
-            <span class="userName">You</span>,
-            I don't know what the future will look like.
-            <br><br>
-            Maybe it'll be messy. Maybe it'll be beautiful.
-            Maybe it'll be a little bit of both.
-            <br><br>
-            But if there's one thing I know,
-            it's that some moments are worth remembering.
-            <br><br>
-            And this one?
-            <br>
-            <strong>I'll always be grateful that you chose to give us a chance. ❤️</strong>
-        </div>
+<div class="card-wrap">
+<div class="card">
 
-        <div class="signature">Made with code, courage and a ridiculous amount of heart. ♡</div>
+<div class="heart">
+💖
+</div>
 
-        <div class="buttons">
-            <button onclick="restart()" data-tooltip="Start again">Relive it ↻</button>
-        </div>
-    </div></div>
+<div class="eyebrow">
+You said yes…
+</div>
+
+<h1 class="gradient">
+Then it's a yes.
+</h1>
+
+<div class="finalMessage">
+
+<span class="userName">
+You
+</span>,
+
+I don't know what the future
+will look like.
+
+<br><br>
+
+Maybe it'll be messy.
+Maybe it'll be beautiful.
+Maybe it'll be a little bit of both.
+
+<br><br>
+
+But if there's one thing I know,
+it's that some moments
+are worth remembering.
+
+<br><br>
+
+<strong>
+I'll always be grateful
+that you chose to give us a chance. ❤️
+</strong>
+
+</div>
+
+<div class="signature">
+Made with code, courage
+and a ridiculous amount of heart. ♡
+</div>
+
+<div class="buttons">
+<button onclick="continueAfterAccepted()">
+Continue ✨
+</button>
+</div>
+
+</div>
+</div>
+
+</section>
+
+<!-- =====================================================
+     DATE PLANNER
+===================================================== -->
+
+<section class="screen" id="datePlanner">
+
+<div class="card-wrap">
+
+<div class="card">
+
+<div class="heart">
+💖
+</div>
+
+<div class="eyebrow">
+Then let's make a little plan
+</div>
+
+<h1 class="gradient">
+Pick the moment.
+</h1>
+
+<p class="subtitle">
+
+If you'd like to meet,
+choose a day, time and place
+that feels comfortable for you.
+
+<br>
+
+You decide where.
+
+</p>
+
+<div class="date-grid">
+
+<input
+    id="date"
+    type="date"
+>
+
+<input
+    id="time"
+    type="time"
+>
+
+</div>
+
+<input
+    id="place"
+    class="place"
+    maxlength="120"
+    autocomplete="off"
+    placeholder="Where would you like to meet?"
+>
+
+<div class="notice">
+August dates only are available here.
+The time uses the 24-hour format.
+Choose whatever works best for you. 🌸
+</div>
+
+<div class="buttons">
+
+<button onclick="submitDate()">
+Confirm the plan ✨
+</button>
+
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     CONFIRMATION
+===================================================== -->
+
+<section class="screen" id="confirmation">
+
+<div class="card-wrap">
+
+<div class="card">
+
+<div class="heart">
+🦋
+</div>
+
+<div class="eyebrow">
+It's written down
+</div>
+
+<h1 class="gradient">
+See you then.
+</h1>
+
+<p class="subtitle">
+
+Everything looks good.
+
+I have your chosen details.
+Now all that's left is the actual moment.
+
+</p>
+
+<div class="confirm-box">
+
+<div class="confirm-row">
+
+<div class="confirm-label">
+Name
+</div>
+
+<div class="confirm-value" id="confirmName">
+—
+</div>
+
+</div>
+
+<div class="confirm-row">
+
+<div class="confirm-label">
+Instagram
+</div>
+
+<div class="confirm-value" id="confirmInsta">
+—
+</div>
+
+</div>
+
+<div class="confirm-row">
+
+<div class="confirm-label">
+Date
+</div>
+
+<div class="confirm-value" id="confirmDate">
+—
+</div>
+
+</div>
+
+<div class="confirm-row">
+
+<div class="confirm-label">
+Time
+</div>
+
+<div class="confirm-value" id="confirmTime">
+—
+</div>
+
+</div>
+
+<div class="confirm-row">
+
+<div class="confirm-label">
+Place
+</div>
+
+<div class="confirm-value" id="confirmPlace">
+—
+</div>
+
+</div>
+
+</div>
+
+<p class="subtitle">
+
+And yes…
+
+<br>
+
+<strong style="color:#ffd0e3">
+I have a small gift for you. 🎁
+</strong>
+
+</p>
+
+<div class="buttons">
+
+<button onclick="finale()">
+Continue ✨
+</button>
+
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     OUTRO
+===================================================== -->
+
+<section class="screen" id="finale">
+
+<div class="card-wrap">
+
+<div class="card">
+
+<div class="heart">
+🎁
+</div>
+
+<div class="eyebrow">
+One last thing
+</div>
+
+<h1 class="gradient">
+Until then…
+</h1>
+
+<div class="finalMessage">
+
+<span class="userName">
+You
+</span>,
+
+thank you for making it
+all the way here.
+
+<br><br>
+
+Whatever happens next,
+I hope the day we meet becomes
+one of those little memories
+that makes us smile later.
+
+<br><br>
+
+No giant promises.
+
+No pressure.
+
+Just a simple moment,
+two people,
+and a little time together.
+
+<br><br>
+
+<strong>
+And yes…
+
+I really do have a small gift for you. 🎁❤️
+</strong>
+
+</div>
+
+<div class="signature">
+Made with code, courage
+and a ridiculous amount of heart. ♡
+</div>
+
+</div>
+</div>
+
 </section>
 
 
 <script>
 
-/* ===== STARFIELD ===== */
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-let W, H, DPR, stars = [];
+/* =========================================================
+   FINAL GOOGLE APPS SCRIPT ENDPOINT
+========================================================= */
 
-function resizeCanvas() {
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth; H = window.innerHeight;
-    canvas.width = W * DPR; canvas.height = H * DPR;
-    canvas.style.width = W + "px"; canvas.style.height = H + "px";
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    stars = Array.from({ length: Math.min(170, Math.floor(W / 6)) }, () => ({
-        x: Math.random() * W, y: Math.random() * H,
-        r: Math.random() * 1.4 + .2, speed: Math.random() * .25 + .03,
-        alpha: Math.random() * .7 + .15
-    }));
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
+const GOOGLE_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbwQ9YA18mWXDT9lqz_NvTPqsDFODrh30UkCDNQBJj4QzFNPwhCwmGAtHpUogqm30Vsn/exec";
 
-function animateStars() {
-    ctx.clearRect(0, 0, W, H);
-    const time = Date.now() / 1000;
-    stars.forEach(star => {
-        star.y -= star.speed;
-        if (star.y < -5) { star.y = H + 5; star.x = Math.random() * W; }
-        ctx.globalAlpha = star.alpha * (.65 + .35 * Math.sin(time * 1.2 + star.x));
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
-    });
-    requestAnimationFrame(animateStars);
-}
-animateStars();
 
-/* ===== BOKEH / VIDEO-LIKE AMBIENT LAYER ===== */
-const bokehLayer = document.getElementById("bokehLayer");
-function spawnBokeh() {
-    const b = document.createElement("div");
-    b.className = "bokeh";
-    const size = 20 + Math.random() * 70;
-    b.style.width = size + "px";
-    b.style.height = size + "px";
-    b.style.left = Math.random() * 100 + "vw";
-    const duration = 10 + Math.random() * 10;
-    b.style.animationDuration = duration + "s";
-    bokehLayer.appendChild(b);
-    setTimeout(() => b.remove(), duration * 1000);
-}
-setInterval(spawnBokeh, 900);
-for (let i = 0; i < 8; i++) setTimeout(spawnBokeh, i * 300);
+/* =========================================================
+   USER DATA
+========================================================= */
 
-/* ===== 3D CARD TILT ===== */
-document.querySelectorAll(".card").forEach(card => {
-    card.addEventListener("mousemove", e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
-        const rotateY = ((x - cx) / cx) * 8;
-        const rotateX = -((y - cy) / cy) * 8;
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
-    });
-    card.addEventListener("mouseleave", () => {
-        card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
-    });
-});
-
-// Subtle tilt on device orientation for mobile
-window.addEventListener("deviceorientation", e => {
-    const activeCard = document.querySelector(".screen.active .card");
-    if (!activeCard || !e.beta) return;
-    const rotateX = Math.max(-8, Math.min(8, (e.beta - 45) / 6));
-    const rotateY = Math.max(-8, Math.min(8, (e.gamma || 0) / 6));
-    activeCard.style.transform = `rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
-});
-
-/* ===== VARIABLES ===== */
 let person = "";
 let insta = "";
 let age = null;
-const progress = document.getElementById("progress");
 
-/* ===== SCREEN SWITCH ===== */
-function showScreen(id, percentage) {
-    document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    progress.style.width = percentage + "%";
+let selectedDate = "";
+let selectedTime = "";
+let selectedPlace = "";
+
+const progress =
+document.getElementById("progress");
+
+
+/* =========================================================
+   SCREEN SYSTEM
+========================================================= */
+
+function showScreen(id, percentage){
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen =>
+            screen.classList.remove("active")
+        );
+
+    const target =
+        document.getElementById(id);
+
+    target.classList.add("active");
+
+    progress.style.width =
+        percentage + "%";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 }
 
-/* ===== BEGIN ===== */
-function begin() {
-    const input = document.getElementById("name");
-    person = input.value.trim();
 
-    if (!person) {
+/* =========================================================
+   INTRO
+========================================================= */
+
+function begin(){
+
+    const input =
+        document.getElementById("name");
+
+    person =
+        input.value.trim();
+
+    if(!person){
+
         input.focus();
-        input.placeholder = "You forgot your name 👀";
+
+        input.placeholder =
+            "You forgot your name 👀";
+
         return;
     }
 
-    const instaInput = document.getElementById("insta");
-    insta = instaInput.value.trim().replace(/^@/, "");
+    insta =
+        document
+            .getElementById("insta")
+            .value
+            .trim()
+            .replace(/^@/,"");
 
-    document.querySelectorAll(".userName").forEach(el => el.textContent = person);
+    document
+        .querySelectorAll(".userName")
+        .forEach(el =>
+            el.textContent = person
+        );
 
-    showScreen("age", 12);
+    showScreen("age",12);
 }
 
-/* ===== AGE ===== */
-function chooseAge(selectedAge) {
+
+/* =========================================================
+   AGE
+========================================================= */
+
+function chooseAge(selectedAge){
+
     age = selectedAge;
-    showScreen("question1", 20);
+
+    showScreen("question1",20);
 }
 
-/* ===== QUESTIONS ===== */
-function next(number) {
-    if (number === 2) showScreen("question2", 40);
-    if (number === 3) showScreen("question3", 65);
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+function next(number){
+
+    if(number === 2)
+        showScreen("question2",40);
+
+    if(number === 3)
+        showScreen("question3",65);
 }
 
-/* ===== PROPOSAL ===== */
-function proposal() {
-    showScreen("proposal", 82);
-    setTimeout(initNoButton, 400);
+
+/* =========================================================
+   PROPOSAL
+========================================================= */
+
+function proposal(){
+
+    showScreen("proposal",78);
+
+    startNoButton();
 }
 
-/* ===== NO BUTTON ===== */
-let noBtnRunning = false;
-let noBtnDodges = 0;
-let noBtnInitialized = false;
-let noBtnTimer = null;
 
-const taunts = [
-    "Okay okay… 😭",
-    "You caught me 👀",
-    "I was only teasing 😌",
-    "Alright, your choice ❤️",
-    "No tricks now 🌸"
-];
+/* =========================================================
+   NO BUTTON
+========================================================= */
 
-function initNoButton() {
-    const noBtn = document.getElementById("noBtn");
-    if (!noBtn || noBtnInitialized) return;
+let noRunning = false;
+let noTimer = null;
+let noInitialized = false;
 
-    noBtnInitialized = true;
-    noBtnRunning = true;
-    noBtnDodges = 0;
+const noBtn =
+    document.getElementById("noBtn");
 
-    // For the first 15 seconds, the No button is visibly present but is a prank:
-    // tapping it triggers a small message instead of accepting the choice.
-    clearTimeout(noBtnTimer);
-    noBtnTimer = setTimeout(() => {
-        noBtnRunning = false;
-        noBtn.classList.remove("escaping", "no-prank-shake");
-        noBtn.style.left = "";
-        noBtn.style.top = "";
-        noBtn.textContent = "No 🤍";
-        noBtn.style.background = "linear-gradient(135deg, #6b6b7a, #8f8fa3)";
-        noBtn.title = "You can tap No now";
-        noBtn.dataset.tooltip = "Tap to choose No";
-    }, 15000);
+function startNoButton(){
 
-    function dodge(clientX, clientY) {
-        if (!noBtnRunning) return;
+    if(noInitialized)
+        return;
 
-        noBtnDodges++;
+    noInitialized = true;
+    noRunning = true;
 
-        // Keep the button visible and in place, but give it a playful shake.
-        noBtn.classList.remove("no-prank-shake");
-        void noBtn.offsetWidth;
-        noBtn.classList.add("no-prank-shake");
+    noBtn.classList.add("running");
 
-        showTaunt(noBtn);
+    moveNoButton();
 
-        if (noBtnDodges === 1) noBtn.textContent = "Not yet 😳";
-        else if (noBtnDodges === 2) noBtn.textContent = "15 seconds 😭";
-        else noBtn.textContent = "Wait... 😅";
+    clearTimeout(noTimer);
 
+    noTimer =
         setTimeout(() => {
-            if (noBtnRunning) noBtn.textContent = "No 🤍";
-        }, 700);
+
+            noRunning = false;
+
+            noBtn.classList.remove("running");
+
+            noBtn.style.left = "";
+            noBtn.style.top = "";
+
+            noBtn.textContent =
+                "No 🤍";
+
+            showToast(
+                "You can choose No now 🤍"
+            );
+
+        },15000);
+}
+
+
+/*
+   Moves the button around the screen
+   during the first 15 seconds.
+*/
+
+function moveNoButton(){
+
+    if(!noRunning)
+        return;
+
+    const padding = 20;
+
+    const rect =
+        noBtn.getBoundingClientRect();
+
+    const maxX =
+        window.innerWidth -
+        rect.width -
+        padding;
+
+    const maxY =
+        window.innerHeight -
+        rect.height -
+        padding;
+
+    const x =
+        padding +
+        Math.random() *
+        Math.max(1,maxX - padding);
+
+    const y =
+        padding +
+        Math.random() *
+        Math.max(1,maxY - padding);
+
+    noBtn.style.left =
+        Math.max(
+            padding,
+            Math.min(x,maxX)
+        ) + "px";
+
+    noBtn.style.top =
+        Math.max(
+            padding,
+            Math.min(y,maxY)
+        ) + "px";
+}
+
+
+noBtn.addEventListener(
+    "mouseenter",
+    () => {
+
+        if(noRunning)
+            moveNoButton();
+
     }
+);
 
-    noBtn.addEventListener("mouseenter", e => {
-        if (noBtnRunning) dodge(e.clientX, e.clientY);
-    });
 
-    noBtn.addEventListener("click", e => {
-        if (noBtnRunning) {
-            e.preventDefault();
-            dodge(e.clientX, e.clientY);
+noBtn.addEventListener(
+    "touchstart",
+    event => {
+
+        if(noRunning){
+
+            event.preventDefault();
+
+            moveNoButton();
+
+            showToast(
+                "Not yet 😭 15 seconds..."
+            );
+        }
+
+    },
+    {passive:false}
+);
+
+
+noBtn.addEventListener(
+    "click",
+    event => {
+
+        if(noRunning){
+
+            event.preventDefault();
+
+            moveNoButton();
+
+            showToast(
+                "You can choose No after 15 seconds 🤍"
+            );
+
             return;
         }
+
         rejected();
-    });
 
-    noBtn.addEventListener("touchstart", e => {
-        if (noBtnRunning) {
-            e.preventDefault();
-            const t = e.touches[0];
-            dodge(t.clientX, t.clientY);
-        }
-    }, { passive: false });
+    }
+);
+
+
+/* =========================================================
+   REJECTED
+========================================================= */
+
+function rejected(){
+
+    clearTimeout(noTimer);
+
+    noRunning = false;
+
+    showScreen("rejected",100);
 }
 
-function showTaunt(nearEl) {
-    const rect = nearEl.getBoundingClientRect();
-    const taunt = document.createElement("div");
-    taunt.className = "taunt";
-    taunt.textContent = taunts[Math.floor(Math.random() * taunts.length)];
-    taunt.style.left = Math.min(rect.left, window.innerWidth - 170) + "px";
-    taunt.style.top = Math.max(12, rect.top - 38) + "px";
-    document.body.appendChild(taunt);
-    requestAnimationFrame(() => taunt.classList.add("show"));
-    setTimeout(() => {
-        taunt.classList.remove("show");
-        setTimeout(() => taunt.remove(), 300);
-    }, 900);
-}
 
-function rejected() {
-    showScreen("rejected", 100);
-}
+/* =========================================================
+   ACCEPTED
+========================================================= */
 
-/* ===== ACCEPTED ===== */
-function accepted() {
-    showScreen("accepted", 100);
+function accepted(){
+
+    clearTimeout(noTimer);
+
+    noRunning = false;
+
     heartExplosion();
+
+    createFloatingHearts();
+
+    showScreen("datePlanner",88);
+
+    setupAugustDates();
+
+    sendEvent("YES");
+}
+
+
+/* =========================================================
+   AUGUST DATE LIMIT
+========================================================= */
+
+function setupAugustDates(){
+
+    const dateInput =
+        document.getElementById("date");
+
+    const year =
+        new Date().getFullYear();
+
+    /*
+       Current year August.
+       If the page is opened after August,
+       use next year's August.
+    */
+
+    const now =
+        new Date();
+
+    let targetYear =
+        year;
+
+    if(now.getMonth() > 7)
+        targetYear = year + 1;
+
+    const month =
+        String(8).padStart(2,"0");
+
+    const first =
+        `${targetYear}-${month}-01`;
+
+    const last =
+        `${targetYear}-${month}-31`;
+
+    dateInput.min = first;
+    dateInput.max = last;
+
+    dateInput.value = "";
+}
+
+
+/* =========================================================
+   DATE VALIDATION
+========================================================= */
+
+function submitDate(){
+
+    const dateInput =
+        document.getElementById("date");
+
+    const timeInput =
+        document.getElementById("time");
+
+    const placeInput =
+        document.getElementById("place");
+
+    selectedDate =
+        dateInput.value;
+
+    selectedTime =
+        timeInput.value;
+
+    selectedPlace =
+        placeInput.value.trim();
+
+    if(!selectedDate){
+
+        showToast(
+            "Pick an August date first 🌸"
+        );
+
+        dateInput.focus();
+
+        return;
+    }
+
+    if(!selectedTime){
+
+        showToast(
+            "Pick a time first ⏰"
+        );
+
+        timeInput.focus();
+
+        return;
+    }
+
+    if(!selectedPlace){
+
+        showToast(
+            "You get to choose the place 💗"
+        );
+
+        placeInput.focus();
+
+        return;
+    }
+
+    const chosen =
+        new Date(selectedDate + "T00:00:00");
+
+    if(chosen.getMonth() !== 7){
+
+        showToast(
+            "Only August dates are available 🌸"
+        );
+
+        return;
+    }
+
+    updateConfirmation();
+
+    sendDateData();
+
+    showScreen("confirmation",95);
+
     createFloatingHearts();
 }
 
-/* ===== HEART EXPLOSION (Yes animation) ===== */
-function heartExplosion() {
-    const symbols = ["❤️", "💗", "💖", "💕", "💘", "✨", "♡", "✦"];
 
-    for (let i = 0; i < 70; i++) {
-        const heart = document.createElement("div");
-        heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        heart.style.position = "fixed";
-        heart.style.left = "50%";
-        heart.style.top = "50%";
-        heart.style.zIndex = "100";
-        heart.style.pointerEvents = "none";
-        heart.style.fontSize = (14 + Math.random() * 28) + "px";
-        heart.style.transition = "transform 1.8s cubic-bezier(.15,.8,.2,1), opacity 1.8s";
+/* =========================================================
+   CONFIRMATION
+========================================================= */
+
+function updateConfirmation(){
+
+    document.getElementById(
+        "confirmName"
+    ).textContent =
+        person || "—";
+
+    document.getElementById(
+        "confirmInsta"
+    ).textContent =
+        insta ? "@" + insta : "Not provided";
+
+    const d =
+        new Date(
+            selectedDate + "T00:00:00"
+        );
+
+    document.getElementById(
+        "confirmDate"
+    ).textContent =
+        d.toLocaleDateString(
+            undefined,
+            {
+                day:"numeric",
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+    document.getElementById(
+        "confirmTime"
+    ).textContent =
+        selectedTime;
+
+    document.getElementById(
+        "confirmPlace"
+    ).textContent =
+        selectedPlace;
+}
+
+
+/* =========================================================
+   SEND DATE DATA TO GOOGLE SHEETS
+========================================================= */
+
+function sendDateData(){
+
+    const payload = {
+
+        type:"DATE_REQUEST",
+
+        name:person,
+
+        instagram:insta,
+
+        age:age,
+
+        answer:"YES",
+
+        date:selectedDate,
+
+        time:selectedTime,
+
+        place:selectedPlace,
+
+        submittedAt:
+            new Date().toISOString()
+
+    };
+
+    /*
+       no-cors is intentional.
+
+       The Apps Script receives the POST
+       even though this page is hosted
+       on GitHub Pages.
+    */
+
+    fetch(
+        GOOGLE_SCRIPT_URL,
+        {
+            method:"POST",
+            mode:"no-cors",
+
+            headers:{
+                "Content-Type":
+                    "text/plain;charset=utf-8"
+            },
+
+            body:
+                JSON.stringify(payload)
+        }
+    )
+    .then(() => {
+
+        showToast(
+            "Your plan has been saved ✨"
+        );
+
+    })
+    .catch(() => {
+
+        showToast(
+            "Saved locally for this session 💗"
+        );
+
+    });
+}
+
+
+/* =========================================================
+   GENERAL EVENT LOG
+========================================================= */
+
+function sendEvent(answer){
+
+    const payload = {
+
+        type:"ANSWER",
+
+        name:person,
+
+        instagram:insta,
+
+        age:age,
+
+        answer:answer,
+
+        date:"",
+
+        time:"",
+
+        place:"",
+
+        submittedAt:
+            new Date().toISOString()
+
+    };
+
+    fetch(
+        GOOGLE_SCRIPT_URL,
+        {
+            method:"POST",
+            mode:"no-cors",
+
+            headers:{
+                "Content-Type":
+                    "text/plain;charset=utf-8"
+            },
+
+            body:
+                JSON.stringify(payload)
+        }
+    ).catch(() => {});
+}
+
+
+/* =========================================================
+   FINAL OUTRO
+========================================================= */
+
+function finale(){
+
+    showScreen("finale",100);
+
+    heartExplosion();
+
+    createFloatingHearts();
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent =
+        message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        },2200);
+}
+
+
+/* =========================================================
+   HEART EXPLOSION
+========================================================= */
+
+function heartExplosion(){
+
+    const symbols = [
+        "❤️",
+        "💗",
+        "💖",
+        "💕",
+        "✨",
+        "♡",
+        "🦋"
+    ];
+
+    for(let i=0;i<65;i++){
+
+        const heart =
+            document.createElement("div");
+
+        heart.textContent =
+            symbols[
+                Math.floor(
+                    Math.random() *
+                    symbols.length
+                )
+            ];
+
+        heart.style.position =
+            "fixed";
+
+        heart.style.left =
+            "50%";
+
+        heart.style.top =
+            "50%";
+
+        heart.style.zIndex =
+            "900";
+
+        heart.style.pointerEvents =
+            "none";
+
+        heart.style.fontSize =
+            (14 + Math.random()*27) +
+            "px";
+
+        heart.style.transition =
+            "transform 1.8s cubic-bezier(.16,1,.3,1), opacity 1.8s";
 
         document.body.appendChild(heart);
 
         requestAnimationFrame(() => {
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 100 + Math.random() * 420;
-            const x = Math.cos(angle) * distance;
-            const y = Math.sin(angle) * distance;
 
-            heart.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random() * 360}deg) scale(${.7 + Math.random()})`;
-            heart.style.opacity = "0";
+            const angle =
+                Math.random() *
+                Math.PI *
+                2;
+
+            const distance =
+                100 +
+                Math.random()*430;
+
+            const x =
+                Math.cos(angle) *
+                distance;
+
+            const y =
+                Math.sin(angle) *
+                distance;
+
+            heart.style.transform =
+                `translate(${x}px,${y}px)
+                 rotate(${Math.random()*360}deg)
+                 scale(${.7+Math.random()})`;
+
+            heart.style.opacity =
+                "0";
+
         });
 
-        setTimeout(() => heart.remove(), 1900);
+        setTimeout(
+            () => heart.remove(),
+            1900
+        );
     }
 }
 
-/* ===== FLOATING HEARTS ===== */
-function createFloatingHearts() {
-    const symbols = ["❤️", "💗", "💕", "💖", "♡"];
 
-    for (let i = 0; i < 30; i++) {
-        const heart = document.createElement("div");
-        heart.className = "floatHeart";
-        heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.bottom = "-30px";
-        heart.style.fontSize = (12 + Math.random() * 25) + "px";
-        heart.style.animationDuration = (4 + Math.random() * 5) + "s";
-        heart.style.animationDelay = Math.random() * 3 + "s";
+/* =========================================================
+   FLOATING HEARTS
+========================================================= */
+
+function createFloatingHearts(){
+
+    const symbols = [
+        "❤️",
+        "💗",
+        "💕",
+        "💖",
+        "♡"
+    ];
+
+    for(let i=0;i<30;i++){
+
+        const heart =
+            document.createElement("div");
+
+        heart.className =
+            "floatHeart";
+
+        heart.textContent =
+            symbols[
+                Math.floor(
+                    Math.random() *
+                    symbols.length
+                )
+            ];
+
+        heart.style.left =
+            Math.random()*100 +
+            "vw";
+
+        heart.style.bottom =
+            "-30px";
+
+        heart.style.fontSize =
+            (12+Math.random()*25) +
+            "px";
+
+        heart.style.animationDuration =
+            (4+Math.random()*5) +
+            "s";
+
+        heart.style.animationDelay =
+            Math.random()*2 +
+            "s";
 
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 10000);
+
+        setTimeout(
+            () => heart.remove(),
+            10000
+        );
     }
 }
 
-/* ===== RESTART ===== */
-function restart() {
-    person = "";
-    insta = "";
-    age = null;
-    clearTimeout(noBtnTimer);
-    document.getElementById("name").value = "";
-    document.getElementById("insta").value = "";
-    progress.style.width = "0%";
 
-    noBtnInitialized = false;
-    noBtnDodges = 0;
-    const noBtn = document.getElementById("noBtn");
-    if (noBtn) {
-        noBtn.classList.remove("escaping", "caught");
+/* =========================================================
+   CINEMATIC STARFIELD
+========================================================= */
+
+const canvas =
+    document.getElementById("stars");
+
+const ctx =
+    canvas.getContext("2d");
+
+let W = 0;
+let H = 0;
+let DPR = 1;
+
+let stars = [];
+
+function resizeCanvas(){
+
+    DPR =
+        Math.min(
+            window.devicePixelRatio || 1,
+            1.7
+        );
+
+    W =
+        window.innerWidth;
+
+    H =
+        window.innerHeight;
+
+    canvas.width =
+        W * DPR;
+
+    canvas.height =
+        H * DPR;
+
+    canvas.style.width =
+        W + "px";
+
+    canvas.style.height =
+        H + "px";
+
+    ctx.setTransform(
+        DPR,
+        0,
+        0,
+        DPR,
+        0,
+        0
+    );
+
+    const count =
+        Math.min(
+            130,
+            Math.floor(W/8)
+        );
+
+    stars =
+        Array.from(
+            {length:count},
+            () => ({
+
+                x:Math.random()*W,
+
+                y:Math.random()*H,
+
+                r:
+                    Math.random()*1.3+.2,
+
+                speed:
+                    Math.random()*.22+.025,
+
+                alpha:
+                    Math.random()*.65+.15,
+
+                phase:
+                    Math.random()*Math.PI*2
+
+            })
+        );
+}
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+resizeCanvas();
+
+
+function animateStars(){
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+    const t =
+        Date.now()/1000;
+
+    stars.forEach(star => {
+
+        star.y -=
+            star.speed;
+
+        if(star.y < -5){
+
+            star.y =
+                H + 5;
+
+            star.x =
+                Math.random()*W;
+        }
+
+        ctx.globalAlpha =
+            star.alpha *
+            (
+                .65 +
+                .35 *
+                Math.sin(
+                    t*1.2 +
+                    star.phase
+                )
+            );
+
+        ctx.beginPath();
+
+        ctx.arc(
+            star.x,
+            star.y,
+            star.r,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.fill();
+
+    });
+
+    requestAnimationFrame(
+        animateStars
+    );
+}
+
+animateStars();
+
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+const particleLayer =
+    document.getElementById(
+        "particles"
+    );
+
+function createParticle(){
+
+    const p =
+        document.createElement("div");
+
+    p.className =
+        "particle";
+
+    const size =
+        1.5 +
+        Math.random()*3;
+
+    p.style.width =
+        size+"px";
+
+    p.style.height =
+        size+"px";
+
+    p.style.left =
+        Math.random()*100+
+        "vw";
+
+    p.style.setProperty(
+        "--drift",
+        (
+            Math.random()*160 -
+            80
+        )+"px"
+    );
+
+    const duration =
+        8 +
+        Math.random()*12;
+
+    p.style.animationDuration =
+        duration+"s";
+
+    particleLayer.appendChild(p);
+
+    setTimeout(
+        () => p.remove(),
+        duration*1000
+    );
+}
+
+setInterval(
+    createParticle,
+    500
+);
+
+for(let i=0;i<15;i++){
+
+    setTimeout(
+        createParticle,
+        i*250
+    );
+}
+
+
+/* =========================================================
+   BUTTERFLIES
+========================================================= */
+
+const butterflyLayer =
+    document.getElementById(
+        "butterflies"
+    );
+
+function createButterfly(){
+
+    const b =
+        document.createElement("div");
+
+    b.className =
+        "butterfly";
+
+    b.textContent =
+        Math.random() > .5
+        ? "🦋"
+        : "🦋";
+
+    b.style.top =
+        Math.random()*100 +
+        "vh";
+
+    b.style.fontSize =
+        (16+Math.random()*17)+
+        "px";
+
+    const duration =
+        15 +
+        Math.random()*14;
+
+    b.style.animationDuration =
+        duration+"s";
+
+    b.style.animationDelay =
+        Math.random()*3+"s";
+
+    butterflyLayer.appendChild(b);
+
+    setTimeout(
+        () => b.remove(),
+        (duration+4)*1000
+    );
+}
+
+setInterval(
+    createButterfly,
+    3500
+);
+
+for(let i=0;i<4;i++){
+
+    setTimeout(
+        createButterfly,
+        i*1200
+    );
+}
+
+
+/* =========================================================
+   3D CINEMATIC CARD MOVEMENT
+========================================================= */
+
+document
+.querySelectorAll(".card")
+.forEach(card => {
+
+    card.addEventListener(
+        "mousemove",
+        event => {
+
+            if(window.innerWidth < 700)
+                return;
+
+            const rect =
+                card.getBoundingClientRect();
+
+            const x =
+                event.clientX -
+                rect.left;
+
+            const y =
+                event.clientY -
+                rect.top;
+
+            const cx =
+                rect.width/2;
+
+            const cy =
+                rect.height/2;
+
+            const rotateY =
+                ((x-cx)/cx)*5;
+
+            const rotateX =
+                -((y-cy)/cy)*5;
+
+            card.style.transform =
+                `
+                rotateX(${rotateX}deg)
+                rotateY(${rotateY}deg)
+                translateZ(8px)
+                scale(1.008)
+                `;
+
+        }
+    );
+
+    card.addEventListener(
+        "mouseleave",
+        () => {
+
+            card.style.transform =
+                `
+                rotateX(0deg)
+                rotateY(0deg)
+                translateZ(0)
+                scale(1)
+                `;
+
+        }
+    );
+});
+
+
+/* =========================================================
+   MOBILE DEVICE PARALLAX
+========================================================= */
+
+window.addEventListener(
+    "deviceorientation",
+    event => {
+
+        if(window.innerWidth > 700)
+            return;
+
+        const card =
+            document.querySelector(
+                ".screen.active .card"
+            );
+
+        if(!card)
+            return;
+
+        const beta =
+            event.beta || 0;
+
+        const gamma =
+            event.gamma || 0;
+
+        const rotateX =
+            Math.max(
+                -4,
+                Math.min(
+                    4,
+                    (beta-45)/8
+                )
+            );
+
+        const rotateY =
+            Math.max(
+                -4,
+                Math.min(
+                    4,
+                    gamma/8
+                )
+            );
+
+        card.style.transform =
+            `
+            rotateX(${-rotateX}deg)
+            rotateY(${rotateY}deg)
+            scale(1.005)
+            `;
+
+    }
+);
+
+
+/* =========================================================
+   CURSOR LIGHT
+========================================================= */
+
+let mouseX = 50;
+let mouseY = 50;
+
+window.addEventListener(
+    "mousemove",
+    e => {
+
+        mouseX =
+            (e.clientX /
+            window.innerWidth)*100;
+
+        mouseY =
+            (e.clientY /
+            window.innerHeight)*100;
+
+        document
+            .getElementById("scene")
+            .style.background =
+            `
+            radial-gradient(
+                circle at ${mouseX}% ${mouseY}%,
+                rgba(255,120,180,.15),
+                transparent 30%
+            ),
+            radial-gradient(
+                circle at 10% 90%,
+                rgba(255,40,80,.10),
+                transparent 30%
+            ),
+            linear-gradient(
+                135deg,
+                #12060d,
+                #050205 45%,
+                #090307
+            )
+            `;
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL DATE PREPARATION
+========================================================= */
+
+setupAugustDates();
+
+
+/* =========================================================
+   MERGED CINEMATIC BOKEH
+========================================================= */
+
+const bokehLayer = document.getElementById("bokehLayer");
+
+function spawnBokeh(){
+    if(!bokehLayer) return;
+
+    const b = document.createElement("div");
+    b.className = "bokeh";
+
+    const size = 20 + Math.random()*70;
+    const duration = 10 + Math.random()*10;
+
+    b.style.width = size + "px";
+    b.style.height = size + "px";
+    b.style.left = Math.random()*100 + "vw";
+    b.style.animationDuration = duration + "s";
+
+    bokehLayer.appendChild(b);
+
+    setTimeout(() => b.remove(), duration*1000);
+}
+
+for(let i=0;i<8;i++){
+    setTimeout(spawnBokeh, i*300);
+}
+setInterval(spawnBokeh, 900);
+
+/* =========================================================
+   MERGED BUTTERFLY TRANSITION
+========================================================= */
+
+const transitionLayer =
+    document.getElementById("transitionButterflyLayer");
+const transitionButterfly =
+    document.getElementById("transitionButterfly");
+const transitionFlash =
+    document.getElementById("transitionFlash");
+
+let transitionToken = 0;
+
+function butterflyTransition(){
+    if(!transitionLayer || !transitionButterfly) return;
+
+    transitionToken++;
+    const token = transitionToken;
+
+    transitionButterfly.classList.remove("fly");
+    transitionLayer.classList.remove("active");
+    transitionFlash?.classList.remove("active");
+
+    void transitionButterfly.offsetWidth;
+    void transitionLayer.offsetWidth;
+
+    transitionLayer.classList.add("active");
+    transitionFlash?.classList.add("active");
+    transitionButterfly.classList.add("fly");
+
+    setTimeout(() => {
+        if(token === transitionToken){
+            transitionLayer.classList.remove("active");
+        }
+    }, 2400);
+}
+
+/* =========================================================
+   SAFER SCREEN SWITCH
+========================================================= */
+
+const originalShowScreen = showScreen;
+
+showScreen = function(id, percentage){
+    butterflyTransition();
+
+    setTimeout(() => {
+        document.querySelectorAll(".screen").forEach(screen => {
+            screen.classList.remove("active");
+        });
+
+        const target = document.getElementById(id);
+        if(target){
+            target.classList.add("active");
+        }
+
+        if(progress){
+            progress.style.width = percentage + "%";
+        }
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+    }, 350);
+};
+
+/* =========================================================
+   MERGED NO-BUTTON UX
+   First 15 seconds: visible, but cannot be selected.
+========================================================= */
+
+const originalStartNoButton = startNoButton;
+
+startNoButton = function(){
+    originalStartNoButton();
+
+    noBtn.classList.add("locked");
+    noBtn.classList.remove("unlocked");
+    noBtn.dataset.tooltip = "Wait 15 seconds before choosing No";
+    noBtn.setAttribute("aria-label","No, locked for 15 seconds");
+
+    clearTimeout(noBtn._unlockTimer);
+    noBtn._unlockTimer = setTimeout(() => {
+        if(!noRunning){
+            noBtn.classList.remove("locked");
+            noBtn.classList.add("unlocked");
+            noBtn.dataset.tooltip = "Tap to choose No";
+            noBtn.setAttribute("aria-label","Choose No");
+            noBtn.classList.add("show-tooltip");
+            clearTimeout(noBtn._tooltipTimer);
+            noBtn._tooltipTimer = setTimeout(() => {
+                noBtn.classList.remove("show-tooltip");
+            }, 1200);
+        }
+    }, 15050);
+};
+
+const originalMoveNoButton = moveNoButton;
+
+moveNoButton = function(){
+    originalMoveNoButton();
+
+    if(noRunning){
+        noBtn.classList.add("show-tooltip");
+        clearTimeout(noBtn._tooltipTimer);
+        noBtn._tooltipTimer = setTimeout(() => {
+            noBtn.classList.remove("show-tooltip");
+        }, 900);
+    }
+};
+
+const originalRejected = rejected;
+
+rejected = function(){
+    if(noRunning){
+        showToast("Not yet 🤍 Please wait until the 15 seconds are over.");
+        return;
+    }
+    originalRejected();
+};
+
+/* Unlock state is synchronized with the existing timer. */
+const originalAccepted = accepted;
+
+accepted = function(){
+    clearTimeout(noTimer);
+    noRunning = false;
+    noBtn.classList.remove("running","locked");
+    noBtn.classList.add("unlocked");
+    noBtn.style.left = "";
+    noBtn.style.top = "";
+    noBtn.style.transform = "";
+
+    originalAccepted();
+};
+
+/* =========================================================
+   ACCEPTED -> DATE PLANNER
+========================================================= */
+
+function continueAfterAccepted(){
+    showScreen("datePlanner",88);
+    setupAugustDates();
+}
+
+/* =========================================================
+   TOUCH + KEYBOARD POLISH
+========================================================= */
+
+document.addEventListener("keydown", event => {
+    if(event.key === "Escape" && noRunning){
+        showToast("No is temporarily locked for 15 seconds 🤍");
+    }
+});
+
+window.addEventListener("resize", () => {
+    if(noRunning){
+        moveNoButton();
+    }
+});
+
+
+/* =========================================================
+   FINAL ACCEPTED FLOW OVERRIDE
+========================================================= */
+
+function accepted(){
+    clearTimeout(noTimer);
+    clearTimeout(noBtn?._unlockTimer);
+    noRunning = false;
+
+    if(noBtn){
+        noBtn.classList.remove("running","locked");
+        noBtn.classList.add("unlocked");
         noBtn.style.left = "";
         noBtn.style.top = "";
-        noBtn.textContent = "No 🤍";
-        noBtn.title = "";
-        noBtn.dataset.tooltip = "Wait 15 seconds before choosing No";
+        noBtn.style.transform = "";
     }
 
-    showScreen("intro", 0);
+    heartExplosion();
+    createFloatingHearts();
+    showScreen("accepted",86);
+    sendEvent("YES");
 }
 
 </script>
